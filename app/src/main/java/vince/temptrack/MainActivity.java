@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager mgr= (AlarmManager) this.getSystemService(this.ALARM_SERVICE);
         Intent i=new Intent(this, OnAlarmReceiver.class);
         PendingIntent pi= PendingIntent.getBroadcast(this, 0, i, 0);
-        mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 60000, pi);
+        mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 900000, pi);
         //Dans le log j'ai:04-25 10:41:30.130    1898-3699/? W/AlarmManager﹕ Suspiciously short interval 5000 millis; expanding to 60 seconds
         //toutes les 60s après j'ai: AlarmManager﹕ sending alarm {d33ff0f type 2 *walarm*:com.morphotox.cronjob/.OnAlarmReceiver}
     }
