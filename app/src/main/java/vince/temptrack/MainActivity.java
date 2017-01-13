@@ -23,16 +23,15 @@ début 120117 --
 Monitorer la temperature la nuit surtout, quand le tel fonctionne au minimum--temp de la batterie
 Niveau temperature c'est pas mal du tout.
 Premier test: très peu de mesures la nuit alors qu'en journée aucun problème -- hypothèse: dépendance de ACTION_BATTERY_CHANGED?
-
-
-
  */
 
 public class MainActivity extends AppCompatActivity {
 
     public static List<Map.Entry<String,Float>> theTableau = new ArrayList<>();
+    public static float temperature;
     //mBatInfoReceiver myBatInfoReceiver;
     TextView hello;
+
 
 
 
@@ -42,22 +41,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         on_demarre();
         //myBatInfoReceiver = new mBatInfoReceiver();
-        //this.registerReceiver(this.myBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        Intent intentTemp = registerReceiver(new myBatInfoReceiver(), new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
     }
 
-    /*private class mBatInfoReceiver extends BroadcastReceiver {
-        //long temp = 0;
-        double temp;
-        double get_temp(){
-            //return (float)(temp / 10);
-            return (temp/10);
-        }
+    public class myBatInfoReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context arg0, Intent intent) {
-            temp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE,0);
+            temperature = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE,0)/10;
         }
 
-    }*/
+    }
 
     public void actionPressBouton(View v) {
         //8double temp = myBatInfoReceiver.get_temp();
