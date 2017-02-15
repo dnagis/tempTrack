@@ -22,7 +22,9 @@ import java.util.Map;
 début 120117 --
 Monitorer la temperature la nuit surtout, quand le tel fonctionne au minimum--temp de la batterie
 Niveau temperature c'est pas mal du tout.
-Premier test: très peu de mesures la nuit alors qu'en journée aucun problème -- hypothèse: dépendance de ACTION_BATTERY_CHANGED?
+Premier test: très peu de mesures la nuit alors qu'en journée aucun problème -- hypothèse:
+https://developer.android.com/reference/android/app/AlarmManager.html -->
+"Beginning with API 19 (KITKAT) alarm delivery is inexact: the OS will shift alarms in order to minimize wakeups and battery use."
  */
 
 public class MainActivity extends AppCompatActivity {
