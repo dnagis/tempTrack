@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static List<Map.Entry<String,Float>> theTableau = new ArrayList<>();
     public static float temperature;
+    public static long frequence_alarme = 3600000;//en millisecondes
     //mBatInfoReceiver myBatInfoReceiver;
     TextView hello;
 
@@ -41,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        on_demarre();
+        premier_set_alarme();
         //myBatInfoReceiver = new mBatInfoReceiver();
-        Intent intentTemp = registerReceiver(new myBatInfoReceiver(), new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        //Intent intentTemp = registerReceiver(new myBatInfoReceiver(), new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
     }
 
     public class myBatInfoReceiver extends BroadcastReceiver {
@@ -84,13 +85,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void on_demarre(){
+    public void premier_set_alarme(){
+        long now = SystemClock.elapsedRealtime();
         AlarmManager mgr= (AlarmManager) this.getSystemService(this.ALARM_SERVICE);
         Intent i=new Intent(this, OnAlarmReceiver.class);
         PendingIntent pi= PendingIntent.getBroadcast(this, 0, i, 0);
-        mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 900000, pi);
-        //Dans le log j'ai:04-25 10:41:30.130    1898-3699/? W/AlarmManager﹕ Suspiciously short interval 5000 millis; expanding to 60 seconds
-        //toutes les 60s après j'ai: AlarmManager﹕ sending alarm {d33ff0f type 2 *walarm*:com.morphotox.cronjob/.OnAlarmReceiver}
+        //mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 900000, pi); //pb c'est que l'OS ajuste pour optimiser la batterie
+        long heure_prochaine_alarme = now + frequence_alarme;
+        mgr.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, heure_prochaine_alarme, pi);
+        Log.d("Vincent","On est dans premier_set_alarme... now= " + now + " et prochaine alarme sera lancée à " + heure_prochaine_alarme);
+
     }
 
 

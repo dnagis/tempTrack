@@ -1,10 +1,13 @@
 package vince.temptrack;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
+import android.os.SystemClock;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
@@ -35,8 +38,16 @@ public class OnAlarmReceiver extends BroadcastReceiver {
 
         Map.Entry<String,Float> pair=new AbstractMap.SimpleEntry<>(date_txt,MainActivity.temperature);
         MainActivity.theTableau.add(pair);
-        Log.d("Vincent","temperature="+MainActivity.temperature+"taille du tableau="+MainActivity.theTableau.size());
+        Log.d("Vincent"," On est dans onReceive... temperature="+MainActivity.temperature+" taille du tableau="+MainActivity.theTableau.size());
 
+        //depuis alarmmanager set exact il faut bien que je relance une autre alarme!
+        long now = SystemClock.elapsedRealtime();
+        AlarmManager mgr= (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
+        Intent i=new Intent(context, OnAlarmReceiver.class);
+        PendingIntent pi= PendingIntent.getBroadcast(context, 0, i, 0);
+        long heure_prochaine_alarme = now + MainActivity.frequence_alarme;
+        mgr.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, heure_prochaine_alarme, pi);
+        Log.d("Vincent","On est dans onReceive... now= " + now + " et prochaine alarme sera lancée à " + heure_prochaine_alarme);
     }
 
 }
